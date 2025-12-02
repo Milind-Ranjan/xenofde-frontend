@@ -1,38 +1,40 @@
-# --------------------------
-# 1. Builder Stage
-# --------------------------
+# ---- Builder ----
     FROM node:20-slim AS builder
+
     WORKDIR /app
     
-    # Install OS dependencies (Next.js + Prisma need OpenSSL)
-    RUN apt-get update && apt-get install -y openssl
+    # Copy npm config to force correct SWC binary
+    COPY .npmrc .npmrc
     
     # Copy package files
     COPY package*.json ./
     
-    # Install all deps (Linux-compatible SWC downloaded here)
+    # Install ALL dependencies (this downloads the correct Linux SWC)
     RUN npm install
     
-    # Copy source files
+    # Copy entire source code
     COPY . .
     
-    # Build Next.js app
+    # Build Next.js
     RUN npm run build
     
-    
-    # --------------------------
-    # 2. Runner Stage
-    # --------------------------
+    # ---- Runner ----
     FROM node:20-slim AS runner
-    WORKDIR /app
     
-    RUN apt-get update && apt-get install -y openssl
+    WORKDIR /app
     
     ENV NODE_ENV=production
     
-    # Copy only necessary files to keep image small
-    COPY --from=builder /app/package*.json ./
-    COPY --from=builder /app/node_modules ./node_modules
+    # Copy npm config again (sometimes needed)
+    COPY .npmrc .npmrc
+    
+    # Copy package files
+    COPY package*.json ./
+    
+    # Install ONLY production deps
+    RUN npm install --production
+    
+    # Copy build artifacts from builder
     COPY --from=builder /app/.next ./.next
     COPY --from=builder /app/public ./public
     COPY --from=builder /app/next.config.js ./next.config.js
