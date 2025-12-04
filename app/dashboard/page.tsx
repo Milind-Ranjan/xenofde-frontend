@@ -172,23 +172,6 @@ export default function Dashboard() {
 
         <div className="mt-8 grid grid-cols-1 lg:grid-cols-2 gap-6">
           <FunnelMetrics />
-          <div className="bg-white p-6 rounded-lg shadow-sm">
-            <h2 className="text-lg font-semibold mb-4 text-gray-900">Webhook Status</h2>
-            <p className="text-gray-600 mb-4">
-              Real-time data sync is enabled via webhooks. Your Shopify store will automatically update data when orders, customers, or products change.
-            </p>
-            <div className="bg-green-50 border border-green-200 rounded-md p-3">
-              <p className="text-sm text-green-800">
-                ✅ Webhook endpoint: <code className="bg-green-100 px-2 py-1 rounded">{process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'}/api/webhooks/shopify</code>
-              </p>
-            </div>
-            <p className="text-xs text-gray-500 mt-4">
-              Configure this URL in your Shopify admin under Settings → Notifications → Webhooks
-            </p>
-          </div>
-        </div>
-
-        <div className="mt-8">
           <OrdersTable dateRange={dateRange} />
         </div>
       </main>

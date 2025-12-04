@@ -26,5 +26,17 @@ input::placeholder {
   .text-balance {
     text-wrap: balance;
   }
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 6px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background: #c7c7c7;
+    border-radius: 10px;
+  }
+  
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
 }
 
